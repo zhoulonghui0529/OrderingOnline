@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <!-- 管理员mapper -->
+<mapper namespace="com.order.mapper.SystemMapper">
+	 <select id="findSysByName" parameterType="com.order.po.SystemCustomVo" resultMap="systemCustomResultMap">
+	 	SELECT * FROM sys
+		 <where>
+		 	<include refid="sys_where_query"></include>
+		 </where>
+	 </select>
+	 <sql id="sys_where_query">
+	 	AND sys_name=#{systemCustom.systemName}
+	 </sql>
+	 <resultMap type="com.order.po.SystemCustom" id="systemCustomResultMap">
+	 	<id column="id" property="id"/>
+	 	<result column="sys_name" property="systemName"/>
+	 	<result column="sys_pwd" property="systemPwd"/>
+	 </resultMap>
+	 
+	 <select id="findSystem" parameterType="int" resultMap="systemResultMap">
+	 	SELECT * FROM sys
+	 	<where>
+	 		<include refid="systems_where_query"></include>
+	 	</where> 
+	 </select>
+	 <sql id="systems_where_query">
+	 	<if test="value!=null">
+	 		AND id=#{value}
+	 	</if>
+	 </sql>
+	 <resultMap type="com.order.po.System" id="systemResultMap">
+	 	<id column="id" property="id"/>
+	 	<result column="sys_name" property="systemName"/>
+	 	<result column="sys_pwd" property="systemPwd"/>
+	 </resultMap>
+	 
+	 <update id="updateSystem" parameterType="com.order.po.System">
+	 	UPDATE sys  
+	 		<include refid="update_set"></include>
+	 	where id=#{id}
+	 </update>
+	 <sql id="update_set">
+	 	<if test="systemName!=null and systemPwd!=''">
+	 		set sys_name=#{systemName}
+	 	</if>
+	 	<if test="systemPwd!=null and systemPwd!=''">
+	 		set sys_pwd=#{systemPwd}
+	 	</if>
+	 </sql>
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <!-- 管理员mapper -->
+<mapper namespace="com.order.mapper.RoomMapper">
+	<!-- 插入商品信息 -->
+	<insert id="insertRoom" parameterType="com.order.po.Room">
+		INSERT INTO  room VALUES(default,#{systemId},#{roomCode},#{roomType},#{roomState})
+	</insert>
+	<!-- 查询商品信息 -->
+	<select id="findRoom" parameterType="com.order.po.Room" resultMap="roomResultMap">
+		SELECT * FROM room 
+		<where>
+			<include refid="find_where"></include>
+		</where>
+		<include refid="find_limit"></include>
+	</select> 
+	<sql id="find_where">
+		and sys_id=#{systemId}		
+	</sql>
+	<sql id="find_limit">
+		<if test="pager!=null">
+			limit #{pager.start},#{pager.rows}
+		</if>
+	</sql>
+	<resultMap type="com.order.po.Room" id="roomResultMap">
+		<id column="id" property="id"/>
+		<result column="sys_id" property="systemId"/>
+		<result column="room_code" property="roomCode"/>
+		<result column="room_type" property="roomType"/>
+		<result column="room_state" property="roomState"/>
+	</resultMap>
+	
+	<!-- 查询商品总数 -->
+	<select id="findRoomCount" parameterType="int" resultType="int">
+		SELECT count(*) FROM room where sys_id=#{value};
+	</select>
+	
+	<!-- 删除包间信息 -->
+	<delete id="deleteRoom" parameterType="int">
+		DELETE from room where id=#{value}
+	</delete>
+	
+	<!-- 更新商品信息 --> 
+	<update id="updateRoom" parameterType="com.order.po.Room">
+		UPDATE room set room_code=#{roomCode},room_type=#{roomType},room_state=#{roomState} where id=#{id}
+	</update>
+</mapper>

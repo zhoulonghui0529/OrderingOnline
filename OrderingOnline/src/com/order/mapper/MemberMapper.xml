@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <!-- 管理员mapper -->
+<mapper namespace="com.order.mapper.MemberMapper">
+	<!-- 插入商品信息 -->
+	<insert id="insertMember" parameterType="com.order.po.Member">
+		INSERT INTO  member VALUES(default,#{memberName},#{memberPwd},#{memberPhone})
+	</insert>
+	<!-- 查询商品信息 -->
+	<select id="findMember" parameterType="com.order.po.Member" resultMap="memberResultMap">
+		SELECT * FROM member 
+		<where>
+			<include refid="find_where"></include>
+		</where>
+	</select> 
+	<sql id="find_where">
+		and member_name=#{memberName}		
+	</sql>
+	<resultMap type="com.order.po.Member" id="memberResultMap">
+		<id column="id" property="id"/>
+		<result column="member_name" property="memberName"/>
+		<result column="member_pwd" property="memberPwd"/>
+		<result column="member_phone" property="memberPhone"/>
+	</resultMap>
+	<select id="findMemberCount" parameterType="com.order.po.Member" resultType="int">
+		SELECT count(*) FROM member where member_name=#{memberName}
+	</select>
+</mapper>

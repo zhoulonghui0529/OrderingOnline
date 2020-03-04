@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>管理员信息管理</title>
+		<link rel="stylesheet" type="text/css" href="../../jquery-easyui-1.7.0/themes/default/easyui.css">
+		<link rel="stylesheet" type="text/css" href="../../jquery-easyui-1.7.0/themes/icon.css">
+		<link rel="stylesheet" type="text/css" href="../../jquery-easyui-1.7.0/demo/demo.css">
+		<link rel="stylesheet" type="text/css" href="../../css/common/form.css">
+		<script type="text/javascript" src="../../jquery-easyui-1.7.0/jquery.min.js"></script>
+		<script type="text/javascript" src="../../jquery-easyui-1.7.0/jquery.easyui.min.js"></script>
+		<script type="text/javascript" src="../../js/system/system.js"></script>
+	</head>
+	<body>
+		<h2>包间管理</h2>
+		<div class="content" style="margin-left: 50px;margin-top: 20px">
+			<div class="fitem">
+				<label>账户名:</label>
+				<input id="systemName" name="systemName" class="easyui-validatebox" readonly="readonly">
+				<a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="openNameDlg()">编辑</a>
+			</div>
+			<div class="fitem">
+				<label>账户密码:</label>
+				<input id="systemPwd" name="systemPwd" type="password" class="easyui-validatebox" readonly="readonly">
+				<a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="openPwdDlg()">编辑</a>
+			</div>
+		</div>			
+		<div id="nameDlg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px;left:200px;top:200px;"
+			closed="true" buttons="#nameDlg-buttons">
+			<div class="ftitle">修改账号名</div>
+			<form class="fm" id="namefm" method="post" novalidate>
+				<div class="fitem">
+					<label>账户名:</label>
+					<input name="systemName" class="easyui-validatebox" data-options="required:true,validType:'intvalid'">
+				</div>
+			</form>
+		</div>
+		<div id="nameDlg-buttons">
+			<a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveName()">保存</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#nameDlg').dialog('close')">取消</a>
+		</div>
+		
+		<div id="pwdDlg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px;left:200px;top:200px;"
+			closed="true" buttons="#pwdDlg-buttons">
+			<div class="ftitle">修改账号密码</div>
+			<form class="fm" id="pwdfm" method="post" novalidate>
+				<div class="fitem">
+					<label>密码:</label>
+					<input id="pwd" name="systemPwd" type="password" class="easyui-validatebox" data-options="required:true">
+				</div>
+				<div class="fitem">
+					<label>确认密码:</label>
+					<input id="rpwd" name="rpwd" type="password" class="easyui-validatebox"  required="required" validType="equals['#pwd']">
+				</div>
+			</form>
+		</div>
+		<div id="pwdDlg-buttons">
+			<a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="savePwd()">保存</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#pwdDlg').dialog('close')">取消</a>
+		</div>
+	</body>
+</html>

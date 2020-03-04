@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="keywords" content="jquery,ui,easy,easyui,web">
+	<meta name="description" content="easyui help you build your web page easily!">
+	<title>菜品列表</title>
+	<link rel="stylesheet" type="text/css" href="../../jquery-easyui-1.7.0/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../../jquery-easyui-1.7.0/themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="../../jquery-easyui-1.7.0/demo/demo.css">
+	<link rel="stylesheet" type="text/css" href="../../css/common/form.css">
+	<script type="text/javascript" src="../../jquery-easyui-1.7.0/jquery.min.js"></script>
+	<script type="text/javascript" src="../../jquery-easyui-1.7.0/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../../js/system/trades.js"></script>
+</head>
+<body>
+	<h2>菜品列表</h2>
+	<!-- 
+	pagination="true" :开启easyui默认分页组件
+	singleSelect="true":开启单选
+	toolbar="#toolbar" :工具栏
+	 -->
+	<table id="dg" title="菜品信息" class="easyui-datagrid" style="width:1200px;height:500px"
+			url='../../trades/queryTrades.action'
+			toolbar="#toolbar" pagination="true"
+			rownumbers="true" fitColumns="true" singleSelect="true"
+			pageSize="5" pageList="[5,10,15]"
+			>
+		<thead>
+			<tr>
+				<!-- 选择框 -->
+				<th field="ck" checkbox="true"></th>
+				<th field="id" width="30">编号</th>
+				<th field="tradeName" width="30">菜品名称</th>
+				<th field="tradePrice" width="30">菜品价格</th>
+				<th field="tradeStock" width="30">库存</th>
+				<th field="tradeIsSale" width="30" formatter="isSaleFormatter">状态</th>
+				<th field="tradePic" width="30" formatter="picFormatter">图片</th>			
+				<th field="tradeDesc" width="30">描述</th>		
+			</tr>
+		</thead>
+	</table>
+	<div id="toolbar" style="padding:3px">
+		<span>商品名称:</span>
+        <input id="tradeName" style="line-height:20px;border:1px solid #ccc">
+        <a href="#" class="easyui-linkbutton" plain="true" onclick="doSearch()">搜索</a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newTradeDlg()">添加</a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editTradeDlg()">编辑</a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="removeTrade()">移除</a>
+	</div>
+	
+	<div id="newDlg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px;left:200px;top:200px;"
+			closed="true" buttons="#newDlg-buttons">
+		<div class="ftitle">菜品信息</div>
+		<form class="fm" id="savefm" method="post" novalidate>
+			<div class="fitem">
+				<label>菜品名称:</label>
+				<input name="tradeName" class="easyui-validatebox" data-options="required:true">
+			</div>
+			<div class="fitem">
+				<label>菜品价格:</label>
+				<input name="tradePrice" class="easyui-validatebox" data-options="required:true,validType:'intvalid'">
+			</div>
+			<div class="fitem">
+				<label>库存:</label>
+				<!-- 自定义验证js：intvalid  -->
+				<input name="tradeStock" class="easyui-validatebox" data-options="required:true,validType:'intvalid'">
+			</div>
+		</form>
+	</div>
+	<div id="newDlg-buttons">
+		<a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveTrade()">保存</a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#newDlg').dialog('close')">取消</a>
+	</div>
+	<div id="editDlg" class="easyui-dialog" style="width:600px;height:400px;padding:10px 60px;left:200px;top:100px;"
+			closed="true" buttons="#editDlg-buttons">
+		<div class="ftitle">菜品信息</div>
+		<form class="fm" id="editfm" method="post" novalidate enctype="multipart/form-data">
+			<input id="edit_id" name="id" hidden="hidden" class="easyui-validatebox" data-options="required:true">
+			<div class="fitem">
+				<label>菜品名称:</label>
+				<input id="edit_tradeName" name="tradeName" class="easyui-validatebox" data-options="required:true">
+			</div>
+			<div class="fitem">
+				<label>菜品价格:</label>
+				<input id="edit_tradePrice" name="tradePrice" class="easyui-validatebox" data-options="required:true,validType:'intvalid'">
+			</div>
+			<div class="fitem">
+				<label>库存:</label>
+				<input id="edit_tradeStock" name="tradeStock" class="easyui-validatebox" data-options="required:true,validType:'intvalid'">
+			</div>
+			<div class="fitem">
+				<label>状态:</label>
+                <input type="radio" name="tradeIsSale" value="1" style="height: 10px;width: 10px" class="easyui-validatebox"><span style="font-size: 12px">上架</span>
+                <input type="radio" name="tradeIsSale" value="0" style="height: 10px;width: 10px" class="easyui-validatebox"><span style="font-size: 12px">下架</span>
+			</div>
+			<div class="fitem" style="height: 150px">
+				<label>图片:</label>
+				<input id="edit_tradePicSource"  name="tradePicSource" class="easyui-filebox" style="width:200px;height: 20px"><br>
+				<img id="edit_tradePic" alt="菜品图片" src="" style="height:100px;width:100px;margin-left:90px;margin-top:10px;">			
+			</div>
+			<div class="fitem">
+				<label>描述:</label>
+				<input id="edit_tradeDesc" name="tradeDesc" class="easyui-validatebox">
+			</div>
+		</form>
+	</div>
+	<div id="editDlg-buttons">
+		<a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="editTrade()">保存</a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#editDlg').dialog('close')">取消</a>
+	</div>
+</body>
+</html>

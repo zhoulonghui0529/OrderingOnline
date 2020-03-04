@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <!-- 管理员mapper -->
+<mapper namespace="com.order.mapper.CarMapper">
+	<!-- 插入商品信息 -->
+	<insert id="insertCar" parameterType="com.order.po.Car">
+		INSERT INTO  car VALUES(default,#{memberId},#{tradeId},#{tradeName},#{tradePrice},#{tradeNum})
+	</insert>
+	<!-- 查询商品信息 -->
+	<select id="findCar" parameterType="com.order.po.CarCustomVo" resultMap="carResultMap">
+		SELECT * FROM car 
+		<where>
+			<include refid="find_where"></include>
+		</where>
+		<include refid="find_limit"></include>
+	</select> 
+	<sql id="find_where">
+		<if test="car!=null">
+			<if test="car.tradeId!=null and car.tradeId!=''">
+				and trade_id=#{car.tradeId}
+			</if>
+			<if test="car.memberId!=null and car.memberId!=''">
+				and member_id=#{car.memberId}
+			</if>
+		</if>
+	</sql>
+	<sql id="find_limit">
+		<if test="pager!=null">
+			<if test="pager.start!=null and pager.rows!=null">
+				limit #{pager.start},#{pager.rows}
+			</if>
+		</if>
+	</sql>
+	<resultMap type="com.order.po.Car" id="carResultMap">
+		<id column="id" property="id"/>
+		<result column="member_id" property="memberId"/>
+		<result column="trade_id" property="tradeId"/>
+		<result column="trade_name" property="tradeName"/>
+		<result column="trade_price" property="tradePrice"/>
+		<result column="trade_num" property="tradeNum"/>
+	</resultMap>
+	
+	<!-- 查询商品总数 -->
+	<select id="findCarCount" parameterType="int" resultType="int">
+		SELECT count(*) FROM car where member_id=#{value};
+	</select>
+	
+	<!-- 删除包间信息 -->
+	<delete id="deleteCar" parameterType="int">
+		DELETE from car where id=#{value}
+	</delete>
+	
+	<!-- 更新商品信息 --> 
+	<update id="updateCar" parameterType="com.order.po.Car">
+		UPDATE car set trade_num=#{tradeNum} where trade_id=#{tradeId}
+	</update>
+</mapper>

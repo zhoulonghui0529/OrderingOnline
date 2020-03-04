@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>管理员登录</title>
+		<link rel="stylesheet" type="text/css" href="../../jquery-easyui-1.7.0/themes/default/easyui.css">
+		<link rel="stylesheet" type="text/css" href="../../jquery-easyui-1.7.0/themes/icon.css">
+		<link rel="stylesheet" type="text/css" href="../../jquery-easyui-1.7.0/demo/demo.css">
+		<link rel="stylesheet" type="text/css" href="../../css/common/form.css">
+		<link rel="stylesheet" type="text/css" href="../../css/system/login.css">
+		<script type="text/javascript" src="../../jquery-easyui-1.7.0/jquery.min.js"></script>
+		<script type="text/javascript" src="../../jquery-easyui-1.7.0/jquery.easyui.min.js"></script>
+		<script type="text/javascript" src="../../js/system/login.js"></script>
+	</head>
+	<body>
+		<div class="content">
+			<div class="title">
+				管理员登录
+			</div>
+			<form class="fm" id="savefm" method="post" novalidate>
+				<div class="fitem">
+					<label>账号:</label>
+					<input name="sysname" class="easyui-validatebox">
+				</div>
+				<div class="fitem">
+					<label>密码:</label>
+					<input name="syspwd" type="password" class="easyui-validatebox">
+				</div>
+			</form>
+			<div class="login_btn">
+				<a href="#" class="easyui-linkbutton" style="font-size: 12px;" iconCls="icon-ok" plain="true" onclick="Systemlogin()">登录</a>
+			</div>
+		</div>
+	</body>
+</html>

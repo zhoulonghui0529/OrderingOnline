@@ -1,0 +1,5 @@
+问题一： 
+	图片以地址路径的形式存储在数据库中 需要建立一个虚拟路径来存取图片
+	1、找到tomcat的配置文件（\conf\server.xml）并打开
+	2、在【host】与【/host】之间加入如下代码：【<Context path="/files" docBase="F:\Java\orderfile" debug="0" reloadable="true"/>】其中：【path】就是映射的路径，【docBase】就是你的文件所在路径 
+	

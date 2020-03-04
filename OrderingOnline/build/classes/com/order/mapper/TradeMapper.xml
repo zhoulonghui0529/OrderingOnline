@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <!-- 管理员mapper -->
+<mapper namespace="com.order.mapper.TradeMapper">
+	<!-- 插入商品信息 -->
+	<insert id="insertTrade" parameterType="com.order.po.Trade">
+		INSERT INTO  trade(sys_id,trade_name,trade_price,trade_stock) VALUES(#{systemId},#{tradeName},#{tradePrice},#{tradeStock})
+	</insert>
+	<!-- 查询商品信息 -->
+	<select id="findTrades" parameterType="com.order.po.TradeCustomVo" resultMap="tradeCustomsResultMap">
+		SELECT * FROM trade 
+		<where>
+			<include refid="find_where"></include>
+		</where>
+		<include refid="find_limit"></include>
+	</select> 
+	<sql id="find_where">
+		and sys_id=#{systemId}
+		<if test="trade!=null">
+			<if test="trade.tradeName!=null and trade.tradeName!=''">
+				and trade_name like '%${trade.tradeName}%'
+			</if> 
+			<if test="trade.id!=null and trade.id!=''">
+				and id=#{trade.id}
+			</if> 
+		</if>
+	</sql>
+	<sql id="find_limit">
+		<if test="pager!=null">
+			limit #{pager.start},#{pager.rows}
+		</if>
+	</sql>
+	<resultMap type="com.order.po.TradeCustom" id="tradeCustomsResultMap">
+		<id column="id" property="id"/>
+		<result column="sys_id" property="systemId"/>
+		<result column="trade_name" property="tradeName"/>
+		<result column="trade_price" property="tradePrice"/>
+		<result column="trade_stock" property="tradeStock"/>
+		<result column="trade_isSale" property="tradeIsSale"/>
+		<result column="trade_pic" property="tradePic"/>
+		<result column="trade_desc" property="tradeDesc"/>
+	</resultMap>
+	
+	<!-- 查询商品总数 -->
+	<select id="findTradesCount" parameterType="int" resultType="int">
+		SELECT count(*) FROM trade where sys_id=#{value};
+	</select>
+	
+	<!-- 删除商品信息 -->
+	<delete id="deleteTrade" parameterType="int">
+		DELETE from trade where id=#{value}
+	</delete>
+	
+	<!-- 更新商品信息 -->
+	<update id="updateTrade" parameterType="com.order.po.TradeCustom">
+		UPDATE trade set  
+		<include refid="update_set"></include>
+		where id=#{id}
+	</update>
+	<sql id="update_set">
+		<if test="tradePic!=null">
+			trade_name=#{tradeName},trade_price=#{tradePrice},trade_stock=#{tradeStock},trade_pic=#{tradePic},trade_isSale=#{tradeIsSale},trade_desc=#{tradeDesc}
+		</if>
+		<if test="tradePic==null">
+			trade_name=#{tradeName},trade_price=#{tradePrice},trade_stock=#{tradeStock},trade_isSale=#{tradeIsSale},trade_desc=#{tradeDesc}
+		</if>
+	</sql>
+</mapper>
